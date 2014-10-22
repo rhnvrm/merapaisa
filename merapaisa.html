@@ -1,0 +1,51 @@
+<head>
+	<title>Mera Paisa</title>
+</head>
+
+
+<body>
+	<main class = "container">
+		<h1>Mera Paisa</h1>
+		<div class = "row">
+			{{> paisa}}
+		</div>
+	</main>
+
+	<br>
+	<hr>
+	<footer class = "container">
+		<p>Made by Rohan Verma, Praveen Jha, Sonu Raj</p>
+	</footer>
+</body>
+
+
+
+
+<template name = "paisa">
+	<!-- Form for entering new entry -->
+	<form class= "form-horizontal">
+		<input type="text" name="name" placeholder="Name">
+		<input type="number" name="money" placeholder="10">
+		<input type="url" name="photo" placeholder="Put image URL">
+		<button id="insert" class="btn btn-success">Insert</button>
+	</form>
+	<hr>
+
+	<table id="paisa" class="table table-hover">
+      <thead>
+        <tr>
+          <th>Photo</th>        
+          <th>Name</th>
+          <th>Money</th>
+        </tr>
+      </thead>
+        {{#each rows}}
+          	<tr class="row" id="row_{{_id}}">
+				<td><img src="{{photo}}" height = 50px class="profile-picture"></td>	
+				<td>{{name}}</td>
+				<td>{{money}}</td>
+			</tr>
+        {{/each}}
+    </table>
+
+</template>
