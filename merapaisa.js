@@ -2,8 +2,14 @@ Rows = new Meteor.Collection("rows");
 
 if(Meteor.isClient) {
 
+	Meteor.subscribe('theRows');
+
+
 	Template.paisa.rows = function() {
-		return Rows.find();
+
+		var currentUserId = Meteor.userId();
+
+		return Rows.find({createdBy: currentUserId});
 	};
 
 	Template.paisa.events({
@@ -11,8 +17,15 @@ if(Meteor.isClient) {
 			var n = $("input[name=name]").val();
 			var m = $("input[name=money]").val();
 			var p = $("input[name=photo]").val();
+			currentUserId = Meteor.userId();
 			if(n != "") {
-				Rows.insert({name: n, money: m, photo: p});
+				Rows.insert({
+					name: n, 
+					money: m, 
+					photo: p,
+					createdBy: currentUserId
+
+				});
 			}
 
 			$("input[name=name]").val('');
@@ -46,4 +59,11 @@ if (Meteor.isServer) {
 				Rows.insert({name: names[i], money: 0, photo:"http://i.imgur.com/c7zerAO.png"});
 		}*/
 	});
+
+	Meteor.publish('theRows', function(){
+		var currentUserId = this.userId;
+		return Rows.find({ createdBy: currentUserId });
+	});
+
+
 }
