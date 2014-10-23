@@ -2,7 +2,21 @@ Rows = new Meteor.Collection("rows");
 
 if(Meteor.isClient) {
 
-	Meteor.subscribe('theRows');
+
+	Deps.autorun(function() {
+	    Meteor.subscribe('users');
+	    Meteor.subscribe('theRows');
+	});
+	
+	Template.userdetails.avatar = function(){
+		return Meteor.user().avatar;
+	};
+	Template.userdetails.uname = function(){
+		return Meteor.user().username;
+	};
+	Template.userdetails.money = function(){
+		return Meteor.user().money;
+	};
 
 
 	Template.paisa.rows = function() {
@@ -23,10 +37,17 @@ if(Meteor.isClient) {
 					name: n, 
 					money: m, 
 					photo: p,
-					createdBy: currentUserId
 
+					createdBy: currentUserId
 				});
+
+				Meteor.user.update(
+				{_id: currentUserId},
+				{$set: {money: 50}}
+			);
 			}
+
+
 
 			$("input[name=name]").val('');
 			$("input[name=money]").val('');
@@ -64,6 +85,34 @@ if (Meteor.isServer) {
 		var currentUserId = this.userId;
 		return Rows.find({ createdBy: currentUserId });
 	});
+
+	Meteor.publish('users', function() {
+    	return Meteor.users.find({}, {
+    		fields: {
+    			avatar: 1,
+    			money: 1
+    		}
+     	});
+	});
+
+	Accounts.onCreateUser(function (options, user) {
+		if(user.services.twitter) {
+		    user.username = user.services.twitter.screenName;
+		    user.avatar = user.services.twitter.profile_image_url;
+		}
+
+		if(user.services.facebook) {
+			user.username = user.services.facebook.name;
+		    user.avatar = "http://graph.facebook.com/" + user.services.facebook.id + "/picture/?type=square";
+		}
+
+		user.money = 0;
+
+		return user;
+
+	});
+
+
 
 
 }

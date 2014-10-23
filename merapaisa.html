@@ -1,23 +1,39 @@
 <head>
 	<title>Mera Paisa</title>
+	<link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 </head>
 
 
 <body>
 
 	{{> loginButtons}}
-
+	<hr>
 	<main class = "container">
 		<h1>Mera Paisa</h1>
-		<div class = "row">
-			{{> paisa}}
-		</div>
-	</main>
 
+		<hr>
+		
+
+		{{#if currentUser}}
+		
+		{{> userdetails}}
+
+		<hr>
+
+		<br>
+
+			<div class = "row">
+				{{> paisa}}
+			</div>
+		{{/if}}
+
+
+	</main> 
+	
 	<br>
 	<hr>
 	<footer class = "container">
-		<p>Made by Rohan Verma, Praveen Jha, Sonu Raj</p>
+		<p>Made by <a href = "http://rohanverma.cf"> Rohan Verma</a>, Praveen Jha, Sonu Raj</p>
 	</footer>
 </body>
 
@@ -29,7 +45,7 @@
 	<form class= "form-horizontal">
 		<input type="text" name="name" placeholder="Name">
 		<input type="number" name="money" placeholder="10">
-		<input type="url" name="photo" placeholder="Put image URL">
+		<input type="url" name="photo" placeholder="Image URL">
 		<button id="insert" class="btn btn-success">Insert</button>
 	</form>
 	<hr>
@@ -37,18 +53,27 @@
 	<table id="paisa" class="table table-hover">
       <thead>
         <tr>
-          <th>Photo</th>        
+          <th width="50px">     </th>        
           <th>Name</th>
           <th>Money</th>
         </tr>
       </thead>
         {{#each rows}}
-          	<tr class="row" id="row_{{_id}}">
-				<td><img src="{{photo}}" height = 50px class="profile-picture"></td>	
+          	<tr>
+				<td><img src="{{photo}}" class="img-rounded" style="height:50px;"></td>	
 				<td>{{name}}</td>
 				<td>{{money}}</td>
-			</tr>
+			</tr> 
         {{/each}}
     </table>
 
 </template>
+
+<template name= "userdetails">
+	<div class ="container">
+		<h2>
+		<img src="{{avatar}}" class="img-rounded" style="height:50px;">
+		{{uname}} &nbsp; ₹ {{money}}</h2>
+	</div>
+</template>
+
