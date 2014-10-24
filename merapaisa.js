@@ -83,8 +83,8 @@ if(Meteor.isClient) {
 			var p = $("input[name=photo]").val();
 			var d = $("input[id=datePicker]").val();
 			var negate = 1;
+   		    if($("#crdr_insert").val() == "DR") negate = -1;
 			var expr = m * negate;
-   		    if($("#crdr_change").val() == "DR") negate = -1;
 
 			currentUserId = Meteor.userId();
 			if(n != "") {
