@@ -3,6 +3,12 @@ Rows = new Meteor.Collection("rows");
 if(Meteor.isClient) {
 
 
+	Accounts.ui.config({
+
+	  passwordSignupFields: 'USERNAME_AND_EMAIL'
+	});
+
+
 	Deps.autorun(function() {
 	    Meteor.subscribe('users');
 	    Meteor.subscribe('theRows');
@@ -34,6 +40,12 @@ if(Meteor.isClient) {
 		return Rows.find({createdBy: currentUserId});
 	};
 
+
+	Template.paisa.selectedClass = function(){
+		return 'selected';
+	};
+
+
 	Template.paisa.events({
 		'click #insert': function(){
 			var n = $("input[name=name]").val();
@@ -62,6 +74,10 @@ if(Meteor.isClient) {
 			$("input[name=photo]").val('');
 
 			return false;
+		},
+
+		'click tr.row': function(){
+		    
 		}
 	});
 
@@ -90,11 +106,7 @@ if (Meteor.isServer) {
 	});
 
 
-	Accounts.ui.config({
 
-
-		passwordSignupFields: 'USERNAME_AND_EMAIL';
-	});
 
 	Meteor.publish('theRows', function(){
 		var currentUserId = this.userId;
@@ -105,7 +117,6 @@ if (Meteor.isServer) {
     	return Meteor.users.find({}, {
     		fields: {
     			avatar: 1,
-    			money: 1
     		}
      	});
 	});

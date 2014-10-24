@@ -5,8 +5,11 @@
 
 meteor-platform
 accounts-password
-accounts-ui
 accounts-facebook
 accounts-twitter
 accounts-google
 bootstrap
+accounts-ui
+autopublish
+insecure
+
