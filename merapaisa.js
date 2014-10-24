@@ -39,31 +39,10 @@ if(Meteor.isClient) {
 	Template.paisa.rows = function() {
 
 		var currentUserId = Meteor.userId();
-		/*var dateRange = Session.get('selectedDateRange');
+		
 
-		if(selectedDateRange == 'week'){
-			
-			var end = new Date();
-			
-			var start = new Date();
+		return Rows.find({createdBy: currentUserId});
 
-			date.setDate(date.getDate() - 7);
-			console.log('week');
-			return Rows.find({createdBy: currentUserId, date: {$gte:start, $lt:end}});
-		}
-		else if(selectedDateRange == 'month'){
-			
-			var end = new Date();
-			
-			var start = new Date();
-
-			date.setDate(date.getDate() - 30);
-			console.log('yes');
-			return Rows.find({createdBy: currentUserId, date: {$gte:start, $lt:end}});
-		}*/
-		//else{
-				return Rows.find({createdBy: currentUserId});
-		//}
 	};
 
 
