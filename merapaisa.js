@@ -89,6 +89,13 @@ if (Meteor.isServer) {
 		}*/
 	});
 
+
+	Accounts.ui.config({
+
+
+		passwordSignupFields: 'USERNAME_AND_EMAIL';
+	});
+
 	Meteor.publish('theRows', function(){
 		var currentUserId = this.userId;
 		return Rows.find({ createdBy: currentUserId });
