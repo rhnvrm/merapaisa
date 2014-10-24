@@ -15,7 +15,15 @@ if(Meteor.isClient) {
 		return Meteor.user().username;
 	};
 	Template.userdetails.money = function(){
-		return Meteor.user().money;
+		var total = 0;
+		var currentUserId = Meteor.userId();
+
+		Rows.find({createdBy: currentUserId}).map(function(doc) {
+		  total += parseFloat(doc.money);
+		});
+
+
+		return total;
 	};
 
 
