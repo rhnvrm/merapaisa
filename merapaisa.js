@@ -1,5 +1,7 @@
 Rows = new Meteor.Collection("rows");
 
+
+
 if(Meteor.isClient) {
 
 
@@ -12,6 +14,7 @@ if(Meteor.isClient) {
 	Deps.autorun(function() {
 	    Meteor.subscribe('users');
 	    Meteor.subscribe('theRows');
+	    	Session.set('selectedDateRange', 'default');
 	});
 	
 	Template.userdetails.avatar = function(){
@@ -36,35 +39,63 @@ if(Meteor.isClient) {
 	Template.paisa.rows = function() {
 
 		var currentUserId = Meteor.userId();
+		/*var dateRange = Session.get('selectedDateRange');
 
-		return Rows.find({createdBy: currentUserId});
+		if(selectedDateRange == 'week'){
+			
+			var end = new Date();
+			
+			var start = new Date();
+
+			date.setDate(date.getDate() - 7);
+			console.log('week');
+			return Rows.find({createdBy: currentUserId, date: {$gte:start, $lt:end}});
+		}
+		else if(selectedDateRange == 'month'){
+			
+			var end = new Date();
+			
+			var start = new Date();
+
+			date.setDate(date.getDate() - 30);
+			console.log('yes');
+			return Rows.find({createdBy: currentUserId, date: {$gte:start, $lt:end}});
+		}*/
+		//else{
+				return Rows.find({createdBy: currentUserId});
+		//}
 	};
 
 
 	Template.paisa.selectedClass = function(){
-		return 'selected';
+		var selectedPlayer = Session.get('selectedPlayer');
+    	var playerId = this._id;
+    	if(selectedPlayer === playerId){
+        	return 'selected';
+	    }
 	};
 
 
 	Template.paisa.events({
 		'click #insert': function(){
 			var n = $("input[name=name]").val();
-			var m = $("input[name=money]").val();
+			var m = parseInt($("input[id=money]").val());
 			var p = $("input[name=photo]").val();
+			var d = $("input[id=datePicker]").val();
+			var negate = 1;
+			var expr = m * negate;
+   		    if($("#crdr_change").val() == "DR") negate = -1;
+
 			currentUserId = Meteor.userId();
 			if(n != "") {
 				Rows.insert({
 					name: n, 
-					money: m, 
+					money: expr, 
 					photo: p,
+					date: d,
 
 					createdBy: currentUserId
 				});
-
-				Meteor.user.update(
-				{_id: currentUserId},
-				{$set: {money: 50}}
-			);
 			}
 
 
@@ -76,9 +107,39 @@ if(Meteor.isClient) {
 			return false;
 		},
 
-		'click tr.row': function(){
-		    
+		'click tr': function(){
+		    var playerId = this._id;
+        	Session.set('selectedPlayer', playerId);
+        	var selectedPlayer = Session.get('selectedPlayer');
+        	//console.log(selectedPlayer);
+		},
+
+		'click #increment': function(){
+			var selectedPlayer = Session.get('selectedPlayer');
+		    var negate = 1;
+		    var change_val = parseInt($("#changemoney").val());
+		    if(change_val){
+    		    if($("#crdr_change").val() == "DR") negate = -1;
+    
+    		    Rows.update(
+    		        {_id: selectedPlayer},
+    		        {$inc: {money: change_val * negate}}
+    		    );
+		    }
+		},
+
+		'click #showonlythisweek': function(){
+			Session.set('selectedDateRange', 'week');
+		},
+
+		'click #showonlythismonth': function(){
+			Session.set('selectedDateRange', 'month');
+		},
+
+		'click #showall': function(){
+			Session.set('selectedDateRange', 'default');
 		}
+
 	});
 
 
@@ -88,6 +149,8 @@ if(Meteor.isClient) {
 
 if (Meteor.isServer) {
 	Meteor.startup(function () {
+		
+
 		/*
 		INITIALIZING THE DB 
 

@@ -10,7 +10,7 @@
 	<hr>
 	<main class = "container">
 		<h1>Mera Paisa</h1>
-
+		<h4>a money logging app for PECFest</h4>
 		<hr>
 		
 
@@ -33,7 +33,7 @@
 	<br>
 	<hr>
 	<footer class = "container">
-		<p>Made by <a href = "http://rohanverma.cf"> Rohan Verma</a>, Praveen Jha, Sonu Raj</p>
+		<p>Made by Praveen Jha, <a href = "http://rohanverma.cf"> Rohan Verma</a>, Sonu Raj</p> | team #PqRS | @ASU
 	</footer>
 </body>
 
@@ -44,29 +44,54 @@
 	<!-- Form for entering new entry -->
 	<form class= "form-horizontal">
 		<input type="text" name="name" placeholder="Name">
-		<input type="number" name="money" placeholder="10">
+		<div class="btn-group">
+			<input class="btn btn-inverse" type="button" id="crdr_insert" onclick="if(this.value=='CR'){ this.value = 'DR';} else {this.value = 'CR';}" value="CR" />
+			<input type="number" id="money" placeholder="10" min = 0>
+		</div>
 		<input type="url" name="photo" placeholder="Image URL">
+		<input type="date" id="datePicker">
+		<script>
+			document.getElementById('datePicker').valueAsDate = new Date();
+		</script>
+
+
 		<button id="insert" class="btn btn-success">Insert</button>
 	</form>
 	<hr>
 
+	<a id="showonlythisweek">this week</a> | <a id= "showonlythismonth">this month</a> | <a id="showall">all</a>
+	<br>
 	<table id="paisa" class="table table-hover">
       <thead>
         <tr>
           <th width="50px">     </th>        
           <th>Name</th>
           <th>Money</th>
+          <th>Date</th>
         </tr>
       </thead>
         {{#each rows}}
-          	<tr >
+          	<tr id="{{id}}" class = "{{selectedClass}}">
 				<td><img src="{{photo}}" class="img-rounded" style="height:50px;"></td>	
 				<td>{{name}}</td>
 				<td>{{money}}</td>
+				<td>{{date}}</td>
 			</tr> 
         {{/each}}
     </table>
 
+    <form class= "form-horizontal">
+
+
+
+	   
+
+	<div class="btn-group">
+	<input class="btn btn-inverse" type="button" id="crdr_change" onclick="if(this.value=='CR'){ this.value = 'DR';} else {this.value = 'CR';}" value="CR" />
+	 <input type="number" id="changemoney" placeholder="10" min = 0>
+	 <input class="btn btn-success" type="button" id="increment" value="Go" />
+	</div>
+    </form>
 </template>
 
 <template name= "userdetails">
@@ -74,6 +99,9 @@
 		<h2>
 		<img src="{{avatar}}" class="img-rounded" style="height:50px;">
 		{{uname}} &nbsp; ₹ {{money}}</h2>
+
+
+
 	</div>
 </template>
 
